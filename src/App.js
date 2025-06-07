@@ -1,23 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import BackgroundSelector from "./components/BackgroundSelector";
+import Canvas from "./components/Canvas";
+import "./App.css";
+
+const availableBackgrounds = ["bg1.png", "bg2.png", "bg3.png"];
 
 function App() {
+  const [background, setBackground] = useState(null);
+
+  const handleBackgroundSelect = (fileName) => {
+    const path = `${process.env.PUBLIC_URL}/backgrounds/${fileName}`;
+    setBackground(path); // Make sure this is updating state correctly
+  };
+
+  const handleClearBackground = () => {
+    setBackground(null);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app">
+      <h2>Certificate Maker</h2>
+      <BackgroundSelector
+        availableBackgrounds={availableBackgrounds}
+        onSelect={handleBackgroundSelect}
+        onClear={handleClearBackground}
+      />
+      <Canvas background={background} />
     </div>
   );
 }
