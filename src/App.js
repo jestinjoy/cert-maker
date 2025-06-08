@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div className="app">
-      <h2>Certificate Maker</h2>
+      <h1>Certificate Maker</h1>
       <BackgroundSelector
         availableBackgrounds={availableBackgrounds}
         onSelect={handleBackgroundSelect}

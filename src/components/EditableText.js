@@ -73,7 +73,7 @@ const EditableText = ({
     onSelect();
   };
 
-  const handleInputChange = (e) => {
+  const handleTextChange = (e) => {
     onChange({ ...style, text: e.target.value });
   };
 
@@ -91,10 +91,10 @@ const EditableText = ({
         cursor: "move",
         userSelect: "none",
         border: isSelected ? "1px dashed #007bff" : "none",
-        padding: "4px",
         backgroundColor: "transparent",
         boxSizing: "border-box",
         zIndex: style.zIndex || 1,
+        overflow: "visible",
       }}
     >
       {isSelected && (
@@ -124,7 +124,8 @@ const EditableText = ({
 
       <textarea
         value={text}
-        onChange={handleInputChange}
+        onChange={handleTextChange}
+        onClick={onSelect}
         style={{
           fontSize: style.fontSize,
           fontWeight: style.bold ? "bold" : "normal",
@@ -135,9 +136,12 @@ const EditableText = ({
           background: "transparent",
           border: "none",
           outline: "none",
-          resize: "none",
           width: "100%",
           height: "100%",
+          resize: "none",
+          overflow: "visible",
+          padding: "4px",
+          whiteSpace: "pre-wrap",
           boxSizing: "border-box",
         }}
       />

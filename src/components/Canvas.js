@@ -5,7 +5,15 @@ import TextToolbar from "./TextToolbar";
 import ImageElement from "./ImageElement";
 import Papa from "papaparse";
 import AlignmentGuides from "./AlignmentGuides";
+import JSZip from "jszip";
+import { saveAs } from "file-saver";
 import "../App.css";
+
+const toCamelCase = (str) =>
+  str
+    .replace(/\s(.)/g, (match, group1) => group1.toUpperCase())
+    .replace(/\s/g, "")
+    .replace(/^(.)/, (group1) => group1.toLowerCase());
 
 const Canvas = ({ background }) => {
   const [textBoxes, setTextBoxes] = useState([]);
@@ -83,13 +91,12 @@ const Canvas = ({ background }) => {
     const currentTemplate = [...textBoxes];
     const jsPDF = (await import("jspdf")).jsPDF;
     const html2canvas = (await import("html2canvas")).default;
-
-    const pdf = new jsPDF({ orientation: "landscape", unit: "px", format: [1000, 707] });
     const canvasElement = document.querySelector(".certificate-canvas");
+    const zip = new JSZip();
+    const firstKey = Object.keys(csvData[0])[0];
 
     for (let i = 0; i < csvData.length; i++) {
       const row = csvData[i];
-
       const filledBoxes = currentTemplate.map((box) => {
         let replaced = box.text;
         Object.keys(row).forEach((key) => {
@@ -108,17 +115,25 @@ const Canvas = ({ background }) => {
       const canvasImage = await html2canvas(canvasElement, {
         scale: 2,
         useCORS: true,
+        backgroundColor: null,
+        logging: false,
+        windowWidth: canvasElement.scrollWidth,
+        windowHeight: canvasElement.scrollHeight,
       });
 
       canvasElement.classList.add("bordered-canvas");
 
       const imgData = canvasImage.toDataURL("image/png");
-
-      if (i > 0) pdf.addPage();
+      const pdf = new jsPDF({ orientation: "landscape", unit: "px", format: [1000, 707] });
       pdf.addImage(imgData, "PNG", 0, 0, 1000, 707);
+
+      const pdfBlob = pdf.output("blob");
+      const fileName = toCamelCase(row[firstKey] || `certificate${i + 1}`) + ".pdf";
+      zip.file(fileName, pdfBlob);
     }
 
-    pdf.save("certificates.pdf");
+    const zipBlob = await zip.generateAsync({ type: "blob" });
+    saveAs(zipBlob, "certificates.zip");
   };
 
   const downloadJSON = (data, filename) => {
@@ -138,6 +153,15 @@ const Canvas = ({ background }) => {
       <div style={{ marginBottom: "10px" }}>
         <button onClick={addTextBox}>➕ Add Text</button>
 
+        <label> Upload image</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageUpload}
+          style={{ marginLeft: "10px" }}
+        />
+
+        <label> Upload Data</label>
         <input
           type="file"
           accept=".csv"
@@ -152,13 +176,6 @@ const Canvas = ({ background }) => {
           📄 Generate PDF
         </button>
 
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleImageUpload}
-          style={{ marginLeft: "10px" }}
-        />
-
         <button
           onClick={() => downloadJSON(textBoxes, "certificate-template.json")}
           style={{ marginLeft: "10px" }}
@@ -166,6 +183,7 @@ const Canvas = ({ background }) => {
           💾 Save Template
         </button>
 
+        <label> Upload Template</label>
         <input
           type="file"
           accept=".json"
@@ -204,6 +222,7 @@ const Canvas = ({ background }) => {
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
+          overflow: "visible",
         }}
         onMouseDown={(e) => {
           if (e.target.classList.contains("certificate-canvas")) {
