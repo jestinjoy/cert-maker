@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/cert-maker/static/css/main.4dbfb512.css",
-    "main.js": "/cert-maker/static/js/main.76f7afdb.js",
+    "main.js": "/cert-maker/static/js/main.da0cd4fe.js",
     "static/js/762.6728cc79.chunk.js": "/cert-maker/static/js/762.6728cc79.chunk.js",
     "static/js/239.49ad3942.chunk.js": "/cert-maker/static/js/239.49ad3942.chunk.js",
     "static/js/453.6b490ffc.chunk.js": "/cert-maker/static/js/453.6b490ffc.chunk.js",
@@ -9,7 +9,7 @@
     "static/js/455.a1a763f7.chunk.js": "/cert-maker/static/js/455.a1a763f7.chunk.js",
     "index.html": "/cert-maker/index.html",
     "main.4dbfb512.css.map": "/cert-maker/static/css/main.4dbfb512.css.map",
-    "main.76f7afdb.js.map": "/cert-maker/static/js/main.76f7afdb.js.map",
+    "main.da0cd4fe.js.map": "/cert-maker/static/js/main.da0cd4fe.js.map",
     "762.6728cc79.chunk.js.map": "/cert-maker/static/js/762.6728cc79.chunk.js.map",
     "239.49ad3942.chunk.js.map": "/cert-maker/static/js/239.49ad3942.chunk.js.map",
     "453.6b490ffc.chunk.js.map": "/cert-maker/static/js/453.6b490ffc.chunk.js.map",
@@ -18,6 +18,6 @@
   },
   "entrypoints": [
     "static/css/main.4dbfb512.css",
-    "static/js/main.76f7afdb.js"
+    "static/js/main.da0cd4fe.js"
   ]
 }
